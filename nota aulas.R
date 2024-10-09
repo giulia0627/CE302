@@ -416,4 +416,115 @@ elemento3
 # Adicionar elementos a uma lista
 minha_lista$nova_lista <- list(novo_vetor = c(1, 2, 3), nova_matriz = matrix(1:4, nrow = 2))
 minha_lista
+######################
 
+## Utilizndo o tdyverse
+library(tidyverse)
+
+## Lendo dados
+dados <- data.table::fread("/home/est/gvea24/CE302/Brazil Total highway crashes 2010 - 2023.csv.gz")
+class(dados)
+head(dados)
+dados
+glimpse(dados)
+
+dados <- data.table::fread("/home/est/gvea24/CE302/Mental Health Dataset.csv")
+class(dados)
+head(dados)
+dados
+glimpse(dados)
+
+Poland <- subset(dados, Country == "Poland")
+Poland
+
+x <- c(-4:4)
+x
+
+sort(cos(unique(x)), decreasing = TRUE)
+
+##  Uso do pipe
+require(magrittr)
+
+set.seed(123)
+rnorm(10)    %>%
+  multiply_by(5) %>%
+  add(5)  
+
+set.seed(123)
+rnorm(10) * 5 + 5
+
+## Pipe de atribuição
+require(dplyr)
+
+## Atribuição explicita
+meu_data_frame <- data.frame(
+  nome = c("Alice", "Bob", "Carol", "Ana", "João", "Carlos", "Patrícia", "Leonardo"),
+  idade = c(25, 30, 28, 20, 27, 50, 60, 45),
+  salario = c(5000, 6000, 5500, 8000, 2000, 3500, 10000, 3800 ), 
+  meio_de_transporte = c('onibus', 'bicicleta', 'onibus', 'carro', 'carro', 'onibus', 'onibus', 'bicicleta'))
+
+meu_data_frame = meu_data_frame %>%
+  mutate(idade_25 = idade > 25)
+
+glimpse(meu_data_frame)
+
+## Atribuição implicita
+meu_data_frame %<>% 
+  mutate(idade_50 = idade > 50)
+glimpse(meu_data_frame)
+meu_data_frame
+
+require(data.table)
+require(dplyr)
+require(tidyr)
+
+car_crash = fread("/home/est/gvea24/CE302/Brazil Total highway crashes 2010 - 2023.csv.gz")
+glimpse(car_crash)
+
+# Seleção de Variáveis
+## Por nome de coluna
+car_crash %>% 
+  select(data, tipo_de_acidente) %>% 
+  head()
+
+car_crash %>% 
+  select(starts_with("tipo")) %>% 
+  head()
+
+car_crash %>% 
+  select(ends_with("feridos")) %>% 
+  head()
+
+car_crash %>% 
+  select(contains("mente")) %>% 
+  head()
+
+# Variãveis por tipo específico de dados
+## variável nimerica
+car_crash %>% 
+  select(where(is.numeric)) %>% 
+  glimpse()
+## variáveis characters
+car_crash %>% 
+  select(where(is.character)) %>% 
+  glimpse()
+## variáveis lógicas
+car_crash %>% 
+  select(where(is.logical)) %>% 
+  glimpse()
+
+## Seleção por critérios
+vars_interesse = c("automovel", "bicicleta", "onibus")
+car_crash %>% 
+  select(all_of(vars_interesse)) %>% 
+  glimpse()
+
+vars_interesse2 = c("automovel", "bicicleta", "onibus", "trator")
+car_crash %>% 
+  select(any_of(vars_interesse2)) %>% 
+  glimpse()
+
+## Seleção de Observações (Filtros Simples)
+dados_filtrados <- car_crash %>%
+  filter(automovel >= 3)
+dados_filtrados
