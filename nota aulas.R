@@ -389,7 +389,6 @@ agregado_por_idade <-  group_by(meu_tibble, idade_anos)
 summarize(agregado_por_idade, media_salario = mean(salario))
 
 # Exemplo de criação de lista
-
 minha_lista <- list(
   vetor = c(1, 2, 3, 4, 5),
   matriz = matrix(1:9, nrow = 3),
@@ -405,7 +404,6 @@ minha_lista <- list(
 minha_lista
 
 # Acessar elementos da lista
-
 elemento1 <- minha_lista[[1]]  # Acessar o primeiro elemento
 elemento2 <- minha_lista$data_frame  # Acessar o data frame
 elemento3 <- minha_lista$lista_aninhada$vetor_aninhado  # Acessar o vetor aninhado
@@ -528,3 +526,93 @@ car_crash %>%
 dados_filtrados <- car_crash %>%
   filter(automovel >= 3)
 dados_filtrados
+
+# 4.4 Exercícios
+## A)
+car_crash %>% 
+  select("data","tipo_de_ocorrencia", "automovel", "bicicleta", "onibus", "caminhao", "moto", "outros")
+## B)
+car_crash %>% 
+  select(ends_with("feridos"))
+
+##  Agrupamento de dados
+tabela <- car_crash %>% 
+  filter(tipo_de_ocorrencia %in% c("sem vítima", "com vítima"))%>% 
+  group_by(tipo_de_ocorrencia) %>%
+  summarise(n = n(), 
+            f_r = n()/nrow(car_crash), 
+            f_per = n()/nrow(car_crash) * 100, 
+            media = mean(levemente_feridos, na.rm = T), 
+            Q1 = quantile(levemente_feridos, 0.25, type = 5, na.rm = T), 
+            Q2 = quantile(levemente_feridos, 0.5, type = 5, na.rm = T), 
+            Q3 = quantile(levemente_feridos, 0.75, type = 5, na.rm = T), 
+            var = var(levemente_feridos, na.rm = T), 
+            sd  = sd(levemente_feridos, na.rm = T), 
+            min = min(levemente_feridos, na.rm = T), 
+            max = max(levemente_feridos, na.rm = T)) 
+tabela
+
+# Transformando Strings em Datas
+# String representando uma data
+data_string <- "2023-08-21"
+
+# Transformando a string em data
+data <- as.Date(data_string)
+
+# Exibindo a data
+print(data)
+
+
+## Adição, subtração, comparação de dias, semanas, meses ou anos:
+data <- as.Date("2023-08-21")
+data1 <- data + 7  # Adicionando 7 dias
+data2 <- data - 1  # Subtraindo 1 dia
+data1 > data2  # Verifica se data1 é posterior a data2
+
+## Formatação de datas para strings:
+data <- as.Date("2023-08-21")
+data_formatada <- format(data, "%d/%m/%Y")
+
+## Extração de componentes de data (ano, mês, dia):
+data <- as.Date("2023-08-21")
+ano <- format(data, "%Y")
+mes <- format(data, "%m")
+dia <- format
+
+## Cálculo de diferenças entre datas:
+data3 <- as.Date("2023-08-21")
+data4 <- as.Date("2023-08-15")
+diferenca <- difftime(data3, data4, units = "days")  # Diferença em dias
+
+## ubridate: Facilitando a Manipulação de Datas no R
+install.packages("lubridate")
+require(lubridate)
+data_ymd <- ymd("2023-08-21")
+data_mdy <- mdy("08-21-2023")
+data_dmy <- dmy("21-08-2023")
+print(data_ymd)
+print(data_dmy)
+
+## Operações com Datas
+data <- ymd("2023-08-21")
+data_nova <- data + days(7)  # Adiciona 7 dias
+data_anterior <- data - months(2)  # Subtrai 2 meses
+print(data_nova)
+print(data_anterior)
+
+## Extraindo Informações de Datas
+data <- ymd_hms("2023-08-21 15:30:45")
+ano <- year(data)
+mes <- month(data)
+dia <- day(data)
+hora <- hour(data)
+minuto <- minute(data)
+segundo <- second(data)
+
+print(ano)
+print(mes)
+print(dia)
+print(hora)
+print(minuto)
+print(segundo)
+
