@@ -319,10 +319,7 @@ Queimadas <- rbind(Queimadas_Q1, Queimadas_Q2, Queimadas_Q3)
 head(Queimadas)
 str(Queimadas)
 dim(Queimadas)
-
 write.csv(Queimadas, file = "/home/est/gvea24/Dataset_FireWatch_Brazil_2024.csv", row.names = FALSE)
-
-
 
 #3 exercícios
 # 1)
@@ -343,8 +340,6 @@ unique(Queimadas$bioma)
 Estado_Sul = c("Paraná", "Santa Catarina", "Rio Grande do Sul")
 Estado_Norte = c("Amazonas", "Para", "Acre", "Amapa", "Roraima", "Rondonia")
 
-
-###
 # Criar um data.table
 meu_data_table <- data.table(
   nome = c("Alice", "Bob", "Carol", "Ana", "João", "Carlos", "Patrícia", "Leonardo"),
@@ -355,11 +350,11 @@ meu_data_table
 
 class(meu_data_table)
 
-# Importar um data.table e comparando o tempo de importação com o read.csv
+## Importar um data.table e comparando o tempo de importação com o read.csv
 system.time(Queimadas <- fread("/home/est/gvea24/Dataset_FireWatch_Brazil_2024.csv"))
 system.time(Queimadas <- read.csv("/home/est/gvea24/Dataset_FireWatch_Brazil_2024.csv"))
 
-# Selecionar colunas e filtrar linhas
+## Selecionar colunas e filtrar linhas
 resultado <- meu_data_table[idade > 25, .(nome, salario)]
 resultado
 
@@ -380,15 +375,15 @@ meu_tibble <- mutate(meu_tibble, `minha coluna` = 1:8)
 meu_tibble <-  rename(meu_tibble, idade_anos = idade)
 meu_tibble
 
-# Filtrar e ordenar
+## Filtrar e ordenar
 resultado <- filter(meu_tibble, idade_anos > 25) 
 arrange(resultado, desc(salario))
 
-# Agregar por idade e calcular média de salários
+## Agregar por idade e calcular média de salários
 agregado_por_idade <-  group_by(meu_tibble, idade_anos) 
 summarize(agregado_por_idade, media_salario = mean(salario))
 
-# Exemplo de criação de lista
+## Exemplo de criação de lista
 minha_lista <- list(
   vetor = c(1, 2, 3, 4, 5),
   matriz = matrix(1:9, nrow = 3),
@@ -403,7 +398,7 @@ minha_lista <- list(
 )
 minha_lista
 
-# Acessar elementos da lista
+## Acessar elementos da lista
 elemento1 <- minha_lista[[1]]  # Acessar o primeiro elemento
 elemento2 <- minha_lista$data_frame  # Acessar o data frame
 elemento3 <- minha_lista$lista_aninhada$vetor_aninhado  # Acessar o vetor aninhado
@@ -411,7 +406,7 @@ elemento1
 elemento2
 elemento3
 
-# Adicionar elementos a uma lista
+## Adicionar elementos a uma lista
 minha_lista$nova_lista <- list(novo_vetor = c(1, 2, 3), nova_matriz = matrix(1:4, nrow = 2))
 minha_lista
 ######################
@@ -527,14 +522,6 @@ dados_filtrados <- car_crash %>%
   filter(automovel >= 3)
 dados_filtrados
 
-# 4.4 Exercícios
-## A)
-car_crash %>% 
-  select("data","tipo_de_ocorrencia", "automovel", "bicicleta", "onibus", "caminhao", "moto", "outros")
-## B)
-car_crash %>% 
-  select(ends_with("feridos"))
-
 ##  Agrupamento de dados
 tabela <- car_crash %>% 
   filter(tipo_de_ocorrencia %in% c("sem vítima", "com vítima"))%>% 
@@ -616,3 +603,96 @@ print(hora)
 print(minuto)
 print(segundo)
 
+## Funções de Resumo de Datas
+# Data original no fuso horário de Nova Iorque
+data_ny <- ymd_hms("2023-08-21 12:00:00", tz = "America/New_York")
+
+# Converter para o fuso horário de Londres
+data_london <- with_tz(data_ny, tz = "Europe/London")
+
+print(data_ny)
+print(data_london)
+
+## Calcular a Diferença de Tempo entre Datas em Fusos Horários Diferentes:
+# Duas datas em fusos horários diferentes
+data_ny <- ymd_hms("2023-08-21 12:00:00", tz = "America/New_York")
+data_london <- ymd_hms("2023-08-21 17:00:00", tz = "Europe/London")
+
+# Calcular a diferença de tempo em horas
+diferenca_horas <- as.numeric(data_london - data_ny)
+print(diferenca_horas)
+
+## Trabalhar com Fusos Horários em Data Frames:
+dados <- data.frame(
+  nome = c("Evento 1", "Evento 2"),
+  data = c(
+    ymd_hms("2023-08-21 12:00:00", tz = "America/New_York"),
+    ymd_hms("2023-08-21 17:00:00", tz = "Europe/London")))
+
+## Converter todas as datas para um fuso horário comum, por exemplo, UTC
+dados$data_utc <- with_tz(dados$data, tz = "UTC")
+print(dados)
+
+## Junção de dados
+require(nycflights13)
+airlines
+airports
+planes
+weather
+
+##  Verificação de Chaves Primárias
+planes %>% 
+  count(tailnum) %>%
+  filter(n > 1)
+
+weather %>%
+  count(time_hour, origin) %>%
+  filter(n > 1)
+
+planes %>%
+  filter(is.na(tailnum))
+
+weather %>% 
+  filter(is.na(time_hour) | is.na(origin))
+
+## Junções Mutacionais
+flights2 <- flights %>% 
+  filter(distance > 2000) %>% 
+  select(year, time_hour, origin, dest, tailnum, carrier)
+flights2
+
+flights2_airlines = 
+  flights2  %>% 
+  left_join(., airlines)
+
+flights2_airlines = 
+  flights2  %>% 
+  left_join(., airlines, 
+            by = "carrier")
+
+## Right Join
+planes_flights = flights2 %>% 
+  right_join(planes, by = "tailnum")
+print(planes_flights)
+## Inner Join
+origin_flights = flights2 %>% 
+  inner_join(airports, by = c("origin"= "faa"))
+origin_flights
+
+origin_flights = flights2 %>% 
+  inner_join(airports, join_by(origin == faa))
+origin_flights
+## Full Join
+dest_flights = flights2 %>% 
+  full_join(airports, by = c("dest"= "faa"))
+
+dest_flights = flights2 %>% 
+  full_join(airports, join_by(dest == faa))
+dest_flights
+## unções de Filtragem
+airports %>% 
+  semi_join(flights2, join_by(faa == origin))
+
+flights %>%
+  anti_join(airports, join_by(dest == faa)) %>% 
+  distinct(dest)
