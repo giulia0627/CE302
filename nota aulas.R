@@ -696,3 +696,13 @@ airports %>%
 flights %>%
   anti_join(airports, join_by(dest == faa)) %>% 
   distinct(dest)
+
+table1 %>% 
+  select(country, year, cases) %>% 
+  pivot_wider(names_from = year, values_from = cases)
+
+table1 %>% 
+  pivot_longer(cols = -c(country, year), 
+               names_to = "variavel", 
+               values_to = "tamanho")
+TB <- fread("../data/TB.csv.gz")
