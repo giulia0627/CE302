@@ -697,12 +697,32 @@ flights %>%
   anti_join(airports, join_by(dest == faa)) %>% 
   distinct(dest)
 
+install.packages("tidyverse")
+library(tidyverse)
 table1 %>% 
   select(country, year, cases) %>% 
   pivot_wider(names_from = year, values_from = cases)
 
-table1 %>% 
-  pivot_longer(cols = -c(country, year), 
-               names_to = "variavel", 
-               values_to = "tamanho")
-TB <- fread("../data/TB.csv.gz")
+require(data.table)
+require(dplyr)
+require(tidyr)
+
+require(tidyverse)
+require(magrittr)
+
+x <- "Seu nome aqui"
+y <- 'Seu nome aqui'
+x == y
+
+var_com_aspas <- "Ela disse: 'Eu adoro lasanha.'"
+var_com_aspas
+
+var_com_aspas2 <- 'Ela disse: "Eu adoro lasanha."'
+var_com_aspas2
+
+var_com_aspas4 <- 'Ela disse: \'Eu adoro lasanha.\''
+var_com_aspas4
+
+
+df <- data.frame(nome = c("Ana", "Maria", "João", NA), 
+                 sobrenome= c("Santos", "Silva", "Souza", NA))
