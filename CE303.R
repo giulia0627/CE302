@@ -6,7 +6,7 @@ library(networkD3)
 library(dplyr)
 df <- data_frame()
 
-#colocar os nós
+## colocar os nós
 nos <- tibble(names =c( "EUa e Canadá",
                         "Europa, Oriente Médio e Africa",
                         "Latam",
@@ -46,17 +46,17 @@ plot <- sankeyNetwork(Links = links, Nodes = nos, Source = 'source', Target = 't
                       NodeID = "names", units = 'Bi', fontSize = 12, nodeWidth = 10)
 plot
 
-## ggplot2
+# ggplot2
 require(dplyr)
 require(ggplot2)
 
 data(mtcars)
 head(mtcars)
 
-# gráfico de dispersão - básico
+## gráfico de dispersão - básico
 mtcars %>% ggplot(aes(x=hp,y=mpg))+geom_point()
 
-#gráfico de dispersão - básico
+## gráfico de dispersão - básico
 mtcars %>% ggplot(aes(x=hp,y=mpg,size=qsec, col=factor(am)))+
   geom_point(alpha=0.7)+
   xlab("potência")+
@@ -69,5 +69,29 @@ mtcars %>% ggplot(aes(x=hp,y=mpg,size=qsec, col=factor(am)))+
   theme_bw()+
   theme(text=element_text(size=15,colour = "blue"),
           plot.title = element_text(hjust=0.5, colour = "blue"))
-        
- 
+
+# mapas 
+require(sf)
+require(dplyr)
+mapa <- st_read("/home/est/gvea24/Downloads/dados_mapa")
+
+plot(st_geometry(mapa))
+mapa$NM_MUNICIP <- iconv(mapa$NM_MUNICIP, from = "latin1", to = "utf-8")
+cidades <- c("CURITIBA",  "PINHAIS",  "QUATRO BARRAS")
+
+cidades <- data.frame(cidades)
+names(cidades) = "NM_MUNICIP"
+cidades2=left_join(cidades, mapa, by="NM_MUNICIP")                        
+mapa_red <- st_as_sf(cidades2)
+
+plot(st_geometry(mapa_red))
+
+dados_pr <- read.csv("/home/est/gvea24/Downloads/dados_mapa/dados_pr.csv", dec= ",", sep =";", header = T)
+
+## view(mapa_red)
+names(dados_pr)[1]= "CD_GEOCODM"
+dados_pr$CD_GEOCODM=as.character(dados_pr$CD_GEOCODM)
+mapa_redD <- left_join(mapa_red, dados_pr, by = "CU_GEOCOMD")
+names(mapa_redD)
+
+mapa1 <- mapa_redD
