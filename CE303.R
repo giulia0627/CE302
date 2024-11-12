@@ -46,7 +46,7 @@ plot <- sankeyNetwork(Links = links, Nodes = nos, Source = 'source', Target = 't
                       NodeID = "names", units = 'Bi', fontSize = 12, nodeWidth = 10)
 plot
 
-# ggplot2
+# ggplot2 
 require(dplyr)
 require(ggplot2)
 
@@ -73,25 +73,82 @@ mtcars %>% ggplot(aes(x=hp,y=mpg,size=qsec, col=factor(am)))+
 # mapas 
 require(sf)
 require(dplyr)
+require(ggplot2)
 mapa <- st_read("/home/est/gvea24/Downloads/dados_mapa")
-
 plot(st_geometry(mapa))
-mapa$NM_MUNICIP <- iconv(mapa$NM_MUNICIP, from = "latin1", to = "utf-8")
-cidades <- c("CURITIBA",  "PINHAIS",  "QUATRO BARRAS")
+
+cidades <- c("CURITIBA","SÃO JOSÉ DOS PINHAIS",
+             "PINHAIS","BOCAIÚVA DO SUL",
+             "QUATRO BARRAS",
+             "ITAPERUÇU","COLOMBO",
+             "ALMIRANTE TAMANDARÉ")
+
+mapa$NM_MUNICIP <- iconv(mapa$NM_MUNICIP,
+                         from="latin1", 
+                         to="utf-8")
+
 
 cidades <- data.frame(cidades)
-names(cidades) = "NM_MUNICIP"
-cidades2=left_join(cidades, mapa, by="NM_MUNICIP")                        
+names(cidades)="NM_MUNICIP"
+cidades2 <- left_join(cidades,mapa,by="NM_MUNICIP")
 mapa_red <- st_as_sf(cidades2)
 
-plot(st_geometry(mapa_red))
+plot(st_geometry((mapa_red)))
 
-dados_pr <- read.csv("/home/est/gvea24/Downloads/dados_mapa/dados_pr.csv", dec= ",", sep =";", header = T)
-
-## view(mapa_red)
-names(dados_pr)[1]= "CD_GEOCODM"
+dados_pr <- read.csv("/home/est/gvea24/Downloads/dados_mapa/dados_pr.csv",dec=",",
+                     sep=";",header=T)
+#View(mapa_red)
+names(dados_pr)[1]="CD_GEOCODM"
 dados_pr$CD_GEOCODM=as.character(dados_pr$CD_GEOCODM)
-mapa_redD <- left_join(mapa_red, dados_pr, by = "CU_GEOCOMD")
+mapa_redD <- left_join(mapa_red,dados_pr,by="CD_GEOCODM")
 names(mapa_redD)
 
-mapa1 <- mapa_redD
+mapa1 <- 
+  mapa_redD %>% ggplot(aes(fill=IDH.municipal))+
+  geom_sf()+
+  scale_fill_gradient(low="tomato",high = "green2")+
+  theme_bw()+
+  theme(legend.position = "bottom")
+
+require(plotly)
+ggplotly(mapa1)
+
+### LEAFLET
+qPaleta <- colorBin("Blues",
+                         mapa_redD$IDH.municipal,
+                         10)
+require(leaflet)
+require(htmltools)
+
+ufpr <- data.frame(lat=-25.450052641847687,
+                   lng=-49.231127407523545)
+mapa_redD %>% 
+  leaflet() %>% 
+  addProviderTiles(providers$Stadia.StamenToner) %>% 
+  addPolygons(color=NA,
+              label=paste(mapa_redD$NM_MUNICIP,
+                          "IDHm:",mapa_redD$IDH.municipal),
+              fillOpacity = 0.6,
+              fillColor = qPaleta(mapa_redD$IDH.municipal)) %>% 
+  addLegend(pal=qPaleta,
+            values=mapa_redD$IDH.municipal,
+            position = "bottomright") %>% 
+  addMarkers(lat=ufpr$lat,lng=ufpr$lng,
+             popup = "Estamos Aqui!")
+
+# Marcas aleatórias
+marcas <- data.frame(lat=runif(25, -26.45, -24.45),
+                     lng=runif(25, -50.23, -48.23))
+
+marcas %>% leaflet() %>%
+  addTiles() %>%
+  addMarkers()
+
+# Marcas como círculo
+marcas %>% leaflet() %>%
+  addTiles() %>%
+  addCircleMarkers(radius = 20,
+                   color = rep(c("red", "blue"),5))
+
+LEGIcon <- makeIcon(iconUrl ="http://web.leg.ufpr.br/img/logo-leg-circle.png",
+                    iconWidth = 25, iconHeight = 25)

@@ -726,3 +726,4 @@ var_com_aspas4
 
 df <- data.frame(nome = c("Ana", "Maria", "João", NA), 
                  sobrenome= c("Santos", "Silva", "Souza", NA))
+
