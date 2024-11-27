@@ -221,7 +221,7 @@ print(tabela_diametro)
 
 ## Grafico de Frequência
 ggplot(data = df , aes(x= stem_height,fill = class))+geom_density(alpha = 0.5) + ylab("Frequência")+
-  xlab("Altura do Estipe") + theme_classic() +labs(fill = "Classe")
+  xlab("Diametro do Estipe") + theme_classic() +labs(fill = "Classe")
 ########################################################################
 
 # Altura do Estipe (classe)
@@ -305,6 +305,10 @@ largura_habitat <- df %>%
 print(largura_habitat)
 tabela_lh <- as.data.frame(t(largura_habitat))
 print(tabela_lh)
+
+## Grafico de Frequência
+ggplot(data = df , aes(x= stem_width,fill = habitat))+geom_density(alpha = 0.5) + ylab("Frequência")+
+  xlab("largura do Estipe") + theme_classic() +labs(fill = "habitat")
 ########################################################################
 
 # Diametro do Pileo (habitat)
@@ -330,6 +334,10 @@ diametro_habitat <- df %>%
 print(diametro_habitat)
 tabela_dh <- as.data.frame(t(diametro_habitat))
 print(tabela_dh)
+
+## Grafico de Frequência
+ggplot(data = df , aes(x= cap_diameter,fill = habitat))+geom_density(alpha = 0.5) + ylab("Frequência")+
+  xlab("Diametro do estipe") + theme_classic() +labs(fill = "habitat")
 ########################################################################
 
 # Altura do Estipe (habitat)
@@ -355,3 +363,7 @@ altura_hahitat <- df %>%
 print(altura_hahitat)
 tabela_ah <- as.data.frame(t(altura_hahitat ))
 print(tabela_ah)
+
+## Grafico de Frequência
+ggplot(data = df , aes(x= stem_height,fill = habitat))+geom_density(alpha = 0.5) + ylab("Frequência")+
+  xlab("Altura do Estipe") + theme_classic() +labs(fill = "habitat")
