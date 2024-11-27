@@ -4,7 +4,7 @@ require(tidyverse)
 require(ggplot2)
 library(networkD3)
 
-df <- fread("C:\\Users\\User\\Documents\\one_million_mushrooms.csv")
+df <- fread("/home/est/gvea24/Downloads/one_million_mushrooms.csv")
 
 # Mudando o nome das colunas para garantir que fiquem com _ ao invés de - 
 names(df) <- gsub("-","_",names(df))
@@ -193,72 +193,165 @@ df <- df %>%
     
      
   )
-####################################
-summary(df)
+########################################################################
 
-
+# Diametro do Pileo (classe)
+## Tabela 
 diametro_pileo <- df %>%
   group_by(df$class) %>%
   filter(cap_diameter > 0) %>%
   summarise(
-    média = mean(cap_diameter, na.rm = TRUE),
-    mediana = median(cap_diameter, na.rm = TRUE),
-    desvio = sd(cap_diameter, na.rm = TRUE),
-    maxímo = max(cap_diameter, na.rm = TRUE),
-    minímo = min(cap_diameter, na.rm = TRUE),
-    amplitude = diff(range(cap_diameter, na.rm = TRUE)),
-    variância = var(cap_diameter, na.rm = TRUE),
-    coefiênte = (sd(cap_diameter)/mean(cap_diameter)) *100,
-    Q1 = quantile(cap_diameter, 0.25),
-    Q2 = quantile(cap_diameter, 0.50),
-    Q3 = quantile(cap_diameter, 0.75),
-    countagem = n()
+    média = round(mean(cap_diameter, na.rm = TRUE),2),
+    mediana = round(median(cap_diameter, na.rm = TRUE),2),
+    desvio = round(sd(cap_diameter, na.rm = TRUE),2),
+    maxímo = round(max(cap_diameter, na.rm = TRUE),2),
+    minímo = round(min(cap_diameter, na.rm = TRUE),2),
+    amplitude = round(diff(range(cap_diameter, na.rm = TRUE)),2),
+    variância = round(var(cap_diameter, na.rm = TRUE),2),
+    coeficiênte = round((sd(cap_diameter)/mean(cap_diameter)) *100,2),
+    Q1 = round(quantile(cap_diameter, 0.25),2),
+    Q2 = round(quantile(cap_diameter, 0.50),2),
+    Q3 = round(quantile(cap_diameter, 0.75),2),
+    contagem = n()
   )
+
+print(diametro_pileo)
+tabela_diametro <- as.data.frame(t(diametro_pileo))
+print(tabela_diametro)
+
+## Grafico de Frequência
+ggplot(data = df , aes(x= stem_height,fill = class))+geom_density(alpha = 0.5) + ylab("Frequência")+
+  xlab("Altura do Estipe") + theme_classic() +labs(fill = "Classe")
+########################################################################
+
+# Altura do Estipe (classe)
+## Tabela
 altura_estipe <- df %>%
   group_by(df$class) %>%
   filter(stem_height > 0) %>%
   summarise(
-    média = mean(stem_height, na.rm = TRUE),
-    mediana = median(stem_height,na.rm = TRUE),
-    desvio= sd(stem_height, na.rm = TRUE),
-    maxímo = max(stem_height, na.rm = TRUE),
-    minímo = min(stem_height, na.rm = TRUE),
-    amplitude = diff(range(stem_height, na.rm = TRUE)),
-    variância = var(stem_height, na.rm = TRUE),
-    coefiênte = (sd(stem_height)/mean(stem_height)) *100,
-    Q1 = quantile(stem_height, 0.25),
-    Q2 = quantile(stem_height, 0.50),
-    Q3 = quantile(stem_height, 0.75),
-    countagem = n()
+    média = round(mean(stem_height, na.rm = TRUE),2),
+    mediana = round(median(stem_height, na.rm = TRUE),2),
+    desvio = round(sd(stem_height, na.rm = TRUE),2),
+    maxímo = round(max(stem_height, na.rm = TRUE),2),
+    minímo = round(min(stem_height, na.rm = TRUE),2),
+    amplitude = round(diff(range(stem_height, na.rm = TRUE)),2),
+    variância = round(var(stem_height, na.rm = TRUE),2),
+    coeficiênte = round((sd(stem_height)/mean(stem_height)) *100,2),
+    Q1 = round(quantile(stem_height, 0.25),2),
+    Q2 = round(quantile(stem_height, 0.50),2),
+    Q3 = round(quantile(stem_height, 0.75),2),
+    contagem = n()
   )
 
+print(altura_estipe)
+tabela_altura <- as.data.frame(t(altura_estipe))
+print(tabela_altura)
 
+## Grafico do Frequência
+ggplot(data = df , aes(x= stem_height,fill = class))+geom_density(alpha = 0.5) + ylab("Frequência")+
+  xlab("Altura do Estipe") + theme_classic() +labs(fill = "Classe")
+########################################################################
+
+# largura do Estipe (classe)
+## Tabela
 largura_estipe <- df %>%
   group_by(df$class) %>%
   filter(stem_width > 0) %>%
   summarise(
-    média = mean(stem_width, na.rm = TRUE),
-    mediana = median(stem_width, na.rm = TRUE),
-    desvio =sd(stem_width, na.rm = TRUE),
-    maxímo = max(stem_width, na.rm = TRUE),
-    minímo = min(stem_width, na.rm = TRUE),
-    amplitude = diff(range(stem_width, na.rm = TRUE)),
-    variância = var(stem_width, na.rm = TRUE),
-    coefiênte = (sd(stem_width)/mean(stem_width)) *100,
-    Q1 = quantile(stem_width, 0.25),
-    Q2 = quantile(stem_width, 0.50),
-    Q3 = quantile(stem_width, 0.75),
-    countagem = n()
+    média = round(mean(stem_width, na.rm = TRUE),2),
+    mediana = round(median(stem_width, na.rm = TRUE),2),
+    desvio = round(sd(stem_width, na.rm = TRUE),2),
+    maxímo = round(max(stem_width, na.rm = TRUE),2),
+    minímo = round(min(stem_width, na.rm = TRUE),2),
+    amplitude = round(diff(range(stem_width, na.rm = TRUE)),2),
+    variância = round(var(stem_width, na.rm = TRUE),2),
+    coeficiênte = round((sd(stem_width)/mean(stem_width)) *100,2),
+    Q1 = round(quantile(stem_width, 0.25),2),
+    Q2 = round(quantile(stem_width, 0.50),2),
+    Q3 = round(quantile(stem_width, 0.75),2),
+    contagem = n()
   )
 
-print(altura_estipe)
-print(diametro_pileo)
 print(largura_estipe)
-
-tabela_diametro <- as.data.frame(t(diametro_pileo))
 tabela_largura <- as.data.frame(t(largura_estipe))
-tabela_altura <- as.data.frame(t(altura_estipe))
-
-print(tabela_altura)
-print(tabela_diametro)
 print(tabela_largura)
+
+## Gafico de Frequência 
+ggplot(data = df , aes(x= stem_width,fill = class))+geom_density(alpha = 0.5) + ylab("Frequência")+
+  xlab("Largura do Estipe") + theme_classic() +labs(fill = "Classe")
+########################################################################
+
+# largura do Estipe (habitat)
+## Tabela
+largura_habitat <- df %>%
+  group_by(df$habitat) %>%
+  filter(stem_width > 0) %>%
+  summarise(
+    média = round(mean(stem_width, na.rm = TRUE),2),
+    mediana = round(median(stem_width, na.rm = TRUE),2),
+    desvio = round(sd(stem_width, na.rm = TRUE),2),
+    maxímo = round(max(stem_width, na.rm = TRUE),2),
+    minímo = round(min(stem_width, na.rm = TRUE),2),
+    amplitude = round(diff(range(stem_width, na.rm = TRUE)),2),
+    variância = round(var(stem_width, na.rm = TRUE),2),
+    coeficiênte = round((sd(stem_width)/mean(stem_width)) *100,2),
+    Q1 = round(quantile(stem_width, 0.25),2),
+    Q2 = round(quantile(stem_width, 0.50),2),
+    Q3 = round(quantile(stem_width, 0.75),2),
+    contagem = n()
+  )
+
+print(largura_habitat)
+tabela_lh <- as.data.frame(t(largura_habitat))
+print(tabela_lh)
+########################################################################
+
+# Diametro do Pileo (habitat)
+## Tabela 
+diametro_habitat <- df %>%
+  group_by(df$habitat) %>%
+  filter(cap_diameter > 0) %>%
+  summarise(
+    média = round(mean(cap_diameter, na.rm = TRUE),2),
+    mediana = round(median(cap_diameter, na.rm = TRUE),2),
+    desvio = round(sd(cap_diameter, na.rm = TRUE),2),
+    maxímo = round(max(cap_diameter, na.rm = TRUE),2),
+    minímo = round(min(cap_diameter, na.rm = TRUE),2),
+    amplitude = round(diff(range(cap_diameter, na.rm = TRUE)),2),
+    variância = round(var(cap_diameter, na.rm = TRUE),2),
+    coeficiênte = round((sd(cap_diameter)/mean(cap_diameter)) *100,2),
+    Q1 = round(quantile(cap_diameter, 0.25),2),
+    Q2 = round(quantile(cap_diameter, 0.50),2),
+    Q3 = round(quantile(cap_diameter, 0.75),2),
+    contagem = n()
+  )
+
+print(diametro_habitat)
+tabela_dh <- as.data.frame(t(diametro_habitat))
+print(tabela_dh)
+########################################################################
+
+# Altura do Estipe (habitat)
+## Tabela
+altura_hahitat <- df %>%
+  group_by(df$habitat) %>%
+  filter(stem_height > 0) %>%
+  summarise(
+    média = round(mean(stem_height, na.rm = TRUE),2),
+    mediana = round(median(stem_height, na.rm = TRUE),2),
+    desvio = round(sd(stem_height, na.rm = TRUE),2),
+    maxímo = round(max(stem_height, na.rm = TRUE),2),
+    minímo = round(min(stem_height, na.rm = TRUE),2),
+    amplitude = round(diff(range(stem_height, na.rm = TRUE)),2),
+    variância = round(var(stem_height, na.rm = TRUE),2),
+    coeficiênte = round((sd(stem_height)/mean(stem_height)) *100,2),
+    Q1 = round(quantile(stem_height, 0.25),2),
+    Q2 = round(quantile(stem_height, 0.50),2),
+    Q3 = round(quantile(stem_height, 0.75),2),
+    contagem = n()
+  )
+
+print(altura_hahitat)
+tabela_ah <- as.data.frame(t(altura_hahitat ))
+print(tabela_ah)
