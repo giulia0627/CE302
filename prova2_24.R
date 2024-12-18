@@ -56,7 +56,7 @@ comparacao <- sapply(ChickWeight[, variaveis], function(x) {
 print("Comparação S² > DMA para todas as variáveis (TRUE = 1, FALSE = 0):")
 print(comparacao)
 
-________________________________________________________________________________
+#________________________________________________________________________________
 # 1. Funções Auxiliares
 # Funções para verificar números primos e quadrados perfeitos:
 # Verifica se um número é primo
@@ -135,7 +135,7 @@ print(paste("A matriz A tem", qtd_primos_A, "números primos."))
 qtd_primos_total <- sum(sapply(c(A, B, C), eh_primo))
 print(paste("As matrizes A, B e C juntas têm", qtd_primos_total, "números primos."))
 
-________________________________________________________________________________
+#________________________________________________________________________________
 
 # Função para simular o número de peixes no lago
 simular_lago <- function(dias, peixes_iniciais, estacao, ph) {
